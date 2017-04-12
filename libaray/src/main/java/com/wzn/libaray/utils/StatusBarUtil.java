@@ -25,6 +25,10 @@ public class StatusBarUtil {
     private static final String CUSTOM_TOP_MARGIN = "CUSTOM_TOP_MARGIN";
     private static final int DEFAULT_COLOR = Color.BLACK;
 
+    public static boolean isSupport(){
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+    }
+
     /**
      * @param activity
      */
