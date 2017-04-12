@@ -10,12 +10,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 
 public class CommonUtils {
+    public static final String pattern = "#,###,##0.00";
 
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
@@ -99,6 +102,58 @@ public class CommonUtils {
                 in.close();
             }
         }
+    }
+
+    public static String formatNum(Object d) {
+        return formatNum(d, pattern);
+    }
+
+    public static String formatNum(double d) {
+        return formatNum(d, pattern);
+    }
+
+    public static String formatNum(double d, RoundingMode r) {
+        return formatNum(d, pattern, r);
+    }
+
+    public static String formatNum(Object d, String pattern) {
+        DecimalFormat decimalFormat = new DecimalFormat(pattern);
+        decimalFormat.setRoundingMode(RoundingMode.HALF_EVEN);
+        return decimalFormat.format(d);
+    }
+
+    public static String formatNum(float d, String pattern) {
+        DecimalFormat decimalFormat = new DecimalFormat(pattern);
+        decimalFormat.setRoundingMode(RoundingMode.HALF_EVEN);
+        return decimalFormat.format(d);
+    }
+
+    public static String formatNum(double d, String pattern) {
+        DecimalFormat decimalFormat = new DecimalFormat(pattern);
+        decimalFormat.setRoundingMode(RoundingMode.HALF_EVEN);
+        return decimalFormat.format(d);
+    }
+
+    public static String formatNum(double d, String pattern, RoundingMode r) {
+        DecimalFormat decimalFormat = new DecimalFormat(pattern);
+        decimalFormat.setRoundingMode(r);
+        return decimalFormat.format(d);
+    }
+
+    public static String formatNum(float f) {
+        return formatNum(f, pattern);
+    }
+
+    public static String formatNum(int d) {
+        DecimalFormat decimalFormat = new DecimalFormat(pattern);
+        decimalFormat.setRoundingMode(RoundingMode.HALF_EVEN);
+        return decimalFormat.format(d);
+    }
+
+    public static String formatNum(long l) {
+        DecimalFormat decimalFormat = new DecimalFormat(pattern);
+        decimalFormat.setRoundingMode(RoundingMode.HALF_EVEN);
+        return decimalFormat.format(l);
     }
 
 }
