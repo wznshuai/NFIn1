@@ -299,7 +299,6 @@ public class TitleBar extends LinearLayout {
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(mLeftView.getLayoutParams());
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
-            ;
             mTitleView.addView(mLeftView, layoutParams);
         }
 
