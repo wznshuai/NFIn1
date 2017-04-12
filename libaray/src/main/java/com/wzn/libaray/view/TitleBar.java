@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.wzn.libaray.utils.CommonUtils;
+import com.wzn.libaray.utils.StatusBarUtil;
 import com.wzn.libaray.utils.ViewUtil;
 import com.wzn.libaray.utils.device.DeviceInfo;
 
@@ -39,6 +40,7 @@ public class TitleBar extends LinearLayout {
     private AppCompatTextView mCenterTxt;
 
     private ArrayList<Integer> mRightChildIds, mLeftChildIds;
+    private boolean isComputeStatusBarHeight;
 
     private int mTitleColor = Color.parseColor("#f07b3b");
 
@@ -46,6 +48,7 @@ public class TitleBar extends LinearLayout {
         super(context);
         init();
     }
+
 
     public TitleBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -61,6 +64,13 @@ public class TitleBar extends LinearLayout {
     public TitleBar(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
+    }
+
+
+    public void setIsComputeStatusBarHeight(boolean isComputeStatusBarHeight) {
+        this.isComputeStatusBarHeight = isComputeStatusBarHeight;
+        invalidate();
+        setPadding(0, isComputeStatusBarHeight ? StatusBarUtil.getStatusBarHeight(getContext()) : 0, 0, 0);
     }
 
     public ArrayList<Integer> getLeftChildIds() {
@@ -96,7 +106,6 @@ public class TitleBar extends LinearLayout {
         setBackgroundColor(mTitleColor);
         setClickable(true);
         setId(ViewUtil.generateViewId());
-
         //初始化title栏按钮、标题所在layout
         mTitleView = new RelativeLayout(getContext());
         LayoutParams mTitleParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) computeHeight());
@@ -326,6 +335,9 @@ public class TitleBar extends LinearLayout {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
         float maxSize = computeHeight();
+        if (isComputeStatusBarHeight) {
+            maxSize += StatusBarUtil.getStatusBarHeight(getContext());
+        }
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec),
                 /*(int) Math.min(height, maxSize)*/ (int) maxSize);
     }
