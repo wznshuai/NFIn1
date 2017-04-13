@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+            <corners android:topRightRadius="@dimen/title_radio_radius"
+                android:bottomRightRadius="@dimen/title_radio_radius"/>
+            <solid android:color="@color/red_1"/>
+            <size android:height="@dimen/title_radio_height"/>
+            <padding android:bottom="@dimen/title_radio_padding_ver"
+                android:top="@dimen/title_radio_padding_ver"
+                android:left="@dimen/title_radio_padding_hor"
+                android:right="@dimen/title_radio_padding_hor"/>
+        </shape>
+    </item>
+    <item android:state_checked="false">
+        <shape android:shape="rectangle">
+            <corners android:topRightRadius="@dimen/title_radio_radius"
+                android:bottomRightRadius="@dimen/title_radio_radius"/>
+            <solid android:color="@color/grey_1"/>
+            <size android:height="@dimen/title_radio_height"/>
+            <padding android:bottom="@dimen/title_radio_padding_ver"
+                android:top="@dimen/title_radio_padding_ver"
+                android:left="@dimen/title_radio_padding_hor"
+                android:right="@dimen/title_radio_padding_hor"/>
+        </shape>
+    </item>
+</selector>

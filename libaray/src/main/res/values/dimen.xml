@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="title_radio_padding_hor">25dp</dimen>
+    <dimen name="title_radio_padding_ver">2dp</dimen>
+    <dimen name="title_radio_height">26dp</dimen>
+    <dimen name="title_radio_radius">18dp</dimen>
+</resources>

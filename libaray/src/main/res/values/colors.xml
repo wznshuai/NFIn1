@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="common_bg">#eeedf3</color>
+    <color name="red_1">#CF1126</color>
+    <color name="grey_1">#f4f4f4</color>
+    <color name="black_1">#333333</color>
 </resources>
