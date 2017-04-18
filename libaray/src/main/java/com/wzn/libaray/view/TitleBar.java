@@ -54,7 +54,11 @@ public class TitleBar extends LinearLayout {
 
     private int mTitleColor = Color.WHITE;
     private boolean isComputeStatusBarHeight;
-    private String mTitleTxtColor = "#333333";
+
+
+    private int mTitleTxtColor = Color.BLACK;
+
+
 
     public TitleBar(Context context) {
         super(context);
@@ -75,6 +79,11 @@ public class TitleBar extends LinearLayout {
     public TitleBar(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
+    }
+
+
+    public void setTitleTxtColor(int titleTxtColor) {
+        this.mTitleTxtColor = titleTxtColor;
     }
 
     public void setIsComputeStatusBarHeight(boolean isComputeStatusBarHeight) {
@@ -183,7 +192,7 @@ public class TitleBar extends LinearLayout {
         AppCompatTextView titleView = new AppCompatTextView(getContext());
         titleView.setTextSize(16);
         titleView.setGravity(Gravity.CENTER);
-        titleView.setTextColor(Color.parseColor(mTitleTxtColor));
+        titleView.setTextColor(mTitleTxtColor);
         titleView.setLayoutParams(layoutParams);
         titleView.setCompoundDrawablePadding(dp2px(getContext(), 2));
         return titleView;
