@@ -48,7 +48,7 @@ public class TitleBar extends LinearLayout {
 
     private View mLineView, mLeftView;
     private RelativeLayout mTitleView;
-    private AppCompatTextView mCenterTxt;
+    private TextView mCenterTxt;
     private RadioGroup mRadioGroup;
     private List<RadioData> mRadioDatas;
 
@@ -84,14 +84,16 @@ public class TitleBar extends LinearLayout {
     }
 
 
-    public void setTitleTxtColor(int titleTxtColor) {
+    public TitleBar setTitleTxtColor(int titleTxtColor) {
         this.mTitleTxtColor = titleTxtColor;
+        return this;
     }
 
-    public void setIsComputeStatusBarHeight(boolean isComputeStatusBarHeight) {
+    public TitleBar setIsComputeStatusBarHeight(boolean isComputeStatusBarHeight) {
         this.isComputeStatusBarHeight = isComputeStatusBarHeight;
         invalidate();
         setPadding(0, isComputeStatusBarHeight ? StatusBarUtil.getStatusBarHeight(getContext()) : 0, 0, 0);
+        return this;
     }
 
     public ArrayList<Integer> getLeftChildIds() {
@@ -106,11 +108,12 @@ public class TitleBar extends LinearLayout {
         return mRightChildIds;
     }
 
-    public void addCustomView(int layoutId) {
+    public TitleBar addCustomView(int layoutId) {
         View view = LayoutInflater.from(getContext()).inflate(layoutId, this, false);
         resetTitleBar();
         removeAllViews();
         addView(view);
+        return this;
     }
 
     private float computeHeight() {
@@ -199,11 +202,11 @@ public class TitleBar extends LinearLayout {
         return titleView;
     }
 
-    private AppCompatTextView makeCenterTxt() {
+    private TextView makeCenterTxt() {
         RelativeLayout.LayoutParams layoutParams =
                 new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.MATCH_PARENT);
-        AppCompatTextView titleView = new AppCompatTextView(getContext());
+        TextView titleView = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.title_button, this, false);
         titleView.setTextSize(16);
         titleView.setGravity(Gravity.CENTER);
         titleView.setTextColor(mTitleTxtColor);
@@ -299,7 +302,7 @@ public class TitleBar extends LinearLayout {
         return mLeftImg;
     }
 
-    public AppCompatTextView getCenterTitleView() {
+    public TextView getCenterTitleView() {
         if (null != mRadioGroup)
             mTitleView.removeView(mRadioGroup);
         if (null == mCenterTxt) {//如果为null 则还没加入到TITLE栏
