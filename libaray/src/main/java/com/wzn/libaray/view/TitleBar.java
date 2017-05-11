@@ -2,6 +2,7 @@ package com.wzn.libaray.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
@@ -24,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.wzn.libaray.R;
 import com.wzn.libaray.utils.StatusBarUtil;
@@ -62,23 +64,23 @@ public class TitleBar extends LinearLayout {
 
     public TitleBar(Context context) {
         super(context);
-        init();
+        init(null, 0, 0);
     }
 
     public TitleBar(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(attrs, 0, 0);
     }
 
     public TitleBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(attrs, defStyleAttr, 0);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public TitleBar(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
+        init(attrs, defStyleAttr, defStyleRes);
     }
 
 
@@ -119,12 +121,18 @@ public class TitleBar extends LinearLayout {
         return Math.max(suggestHeight, rect.height() + 2 * minMarginTop);
     }
 
-    private void init() {
+    private void init(AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        int dividerLineVisibility = View.VISIBLE;
+        if(null != attrs){
+            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.TitleBar, defStyleAttr, defStyleRes);
+            dividerLineVisibility = a.getInt(R.styleable.TitleBar_dividing_line_visibility, View.VISIBLE);
+        }
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER_VERTICAL);
         setBackgroundColor(mTitleColor);
         setClickable(true);
-        setId(ViewUtil.generateViewId());
+        if(getId() == -1)
+            setId(ViewUtil.generateViewId());
 
         //初始化title栏按钮、标题所在layout
         mTitleView = new RelativeLayout(getContext());
@@ -139,6 +147,7 @@ public class TitleBar extends LinearLayout {
         layoutParams.gravity = Gravity.CENTER;
         mLineView.setLayoutParams(layoutParams);
         mLineView.setBackgroundColor(Color.parseColor("#b2b2b2"));
+        mLineView.setVisibility(dividerLineVisibility);
         addView(mLineView);
     }
 
@@ -146,6 +155,11 @@ public class TitleBar extends LinearLayout {
     public TitleBar setBackgroundByColor(@ColorInt int color) {
         setBackgroundColor(color);
         mTitleColor = color;
+        return this;
+    }
+
+    public TitleBar setLineViewVisibility(int visibility){
+        mLineView.setVisibility(visibility);
         return this;
     }
 
@@ -170,11 +184,11 @@ public class TitleBar extends LinearLayout {
         return imageButton;
     }
 
-    private AppCompatTextView makeTitleTxt() {
+    private TextView makeTitleTxt() {
         RelativeLayout.LayoutParams layoutParams =
                 new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.MATCH_PARENT);
-        AppCompatTextView titleView = new AppCompatTextView(getContext());
+        TextView titleView = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.title_button, this, false);
         titleView.setSingleLine();
         titleView.setEllipsize(TextUtils.TruncateAt.END);
         titleView.setTextColor(Color.BLACK);
@@ -208,8 +222,8 @@ public class TitleBar extends LinearLayout {
         return radioButton;
     }
 
-    public AppCompatTextView getRightTxtView() {
-        AppCompatTextView mRightTxt = makeTitleTxt();
+    public TextView getRightTxtView() {
+        TextView mRightTxt = makeTitleTxt();
         mRightTxt.setPadding(getCommonPaddingLeftRight(), 0, getCommonPaddingLeftRight(), 0);
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mRightTxt.getLayoutParams();
         int id = ViewUtil.generateViewId();
@@ -351,9 +365,9 @@ public class TitleBar extends LinearLayout {
         return mRadioGroup;
     }
 
-    public AppCompatTextView getLeftTxtView() {
+    public TextView getLeftTxtView() {
 
-        AppCompatTextView mLeftTxt = makeTitleTxt();
+        TextView mLeftTxt = makeTitleTxt();
         mLeftTxt.setPadding(getCommonPaddingLeftRight(), 0, getCommonPaddingLeftRight(), 0);
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLeftTxt.getLayoutParams();
         int size = getLeftChildIds().size();
