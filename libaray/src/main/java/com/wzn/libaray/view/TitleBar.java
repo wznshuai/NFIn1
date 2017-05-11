@@ -125,7 +125,7 @@ public class TitleBar extends LinearLayout {
         int dividerLineVisibility = View.VISIBLE;
         if(null != attrs){
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.TitleBar, defStyleAttr, defStyleRes);
-            dividerLineVisibility = a.getInt(R.styleable.TitleBar_dividing_line_visibility, View.VISIBLE);
+            dividerLineVisibility = a.getInt(R.styleable.TitleBar_dividing_line_visibility, 0);
         }
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER_VERTICAL);
@@ -147,7 +147,7 @@ public class TitleBar extends LinearLayout {
         layoutParams.gravity = Gravity.CENTER;
         mLineView.setLayoutParams(layoutParams);
         mLineView.setBackgroundColor(Color.parseColor("#b2b2b2"));
-        mLineView.setVisibility(dividerLineVisibility);
+        mLineView.setVisibility(0 == dividerLineVisibility ? View.VISIBLE : 1 == dividerLineVisibility ? View.INVISIBLE : View.GONE);
         addView(mLineView);
     }
 
