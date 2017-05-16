@@ -9,5 +9,6 @@
             <!-- Completely hidden, as if the view had not been added. -->
             <enum name="gone" value="2" />
         </attr>
+        <attr name="EXACTLY_Height" format="dimension"/>
     </declare-styleable>
 </resources>

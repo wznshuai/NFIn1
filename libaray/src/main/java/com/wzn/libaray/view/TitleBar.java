@@ -46,7 +46,7 @@ public class TitleBar extends LinearLayout {
 
     private final String TAG = "TitleBar";
 
-    private View mLineView;
+    private View mLineView, mStatusbarView;
     private ConstraintLayout mTitleView;
     private TextView mCenterTxt;
     private RadioGroup mRadioGroup;
@@ -55,7 +55,6 @@ public class TitleBar extends LinearLayout {
     private ArrayList<Integer> mRightChildIds, mLeftChildIds;
 
     private int mTitleColor = Color.WHITE;
-    private boolean isComputeStatusBarHeight;
 
 
     private int mTitleTxtColor = Color.BLACK;
@@ -89,10 +88,26 @@ public class TitleBar extends LinearLayout {
     }
 
     public TitleBar setIsComputeStatusBarHeight(boolean isComputeStatusBarHeight) {
-        this.isComputeStatusBarHeight = isComputeStatusBarHeight;
-        invalidate();
-        setPadding(0, isComputeStatusBarHeight ? StatusBarUtil.getStatusBarHeight(getContext()) : 0, 0, 0);
+        if (isComputeStatusBarHeight) {
+            if (null == mStatusbarView) {
+                makeStatusbarView();
+                addView(mStatusbarView, 0);
+            }
+        } else {
+            if (null != mStatusbarView) {
+                removeView(mStatusbarView);
+                mStatusbarView = null;
+            }
+        }
         return this;
+    }
+
+    private void makeStatusbarView() {
+        ViewGroup.LayoutParams layoutParams =
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        StatusBarUtil.getStatusBarHeight(getContext()));
+        mStatusbarView = new View(getContext());
+        mStatusbarView.setLayoutParams(layoutParams);
     }
 
     public ArrayList<Integer> getLeftChildIds() {
@@ -125,9 +140,12 @@ public class TitleBar extends LinearLayout {
 
     private void init(AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         int dividerLineVisibility = View.VISIBLE;
+        float mSuggestHeight = 0f;
         if (null != attrs) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.TitleBar, defStyleAttr, defStyleRes);
             dividerLineVisibility = a.getInt(R.styleable.TitleBar_dividing_line_visibility, 0);
+            mSuggestHeight = a.getDimension(R.styleable.TitleBar_EXACTLY_Height, computeHeight());
+            a.recycle();
         }
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER_VERTICAL);
@@ -138,7 +156,7 @@ public class TitleBar extends LinearLayout {
 
         //初始化title栏按钮、标题所在layout
         mTitleView = new ConstraintLayout(getContext());
-        LayoutParams mTitleParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
+        LayoutParams mTitleParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) mSuggestHeight);
         addView(mTitleView, mTitleParams);
 
         //初始化标题栏下方分割线
@@ -456,23 +474,21 @@ public class TitleBar extends LinearLayout {
         return this;
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int height = MeasureSpec.getSize(heightMeasureSpec);
-        int heightModel = MeasureSpec.getMode(heightMeasureSpec);
-        float suggestHeight = computeHeight();
-
-        if (heightModel == MeasureSpec.EXACTLY) {
-            suggestHeight = height;
-        }
-
-        if (isComputeStatusBarHeight) {
-            suggestHeight += StatusBarUtil.getStatusBarHeight(getContext());
-        }
-
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec((int) suggestHeight, MeasureSpec.EXACTLY));
-    }
-
+//    @Override
+//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        int height = MeasureSpec.getSize(heightMeasureSpec);
+//        int heightModel = MeasureSpec.getMode(heightMeasureSpec);
+//        mSuggestHeight = computeHeight();
+//
+//        if (heightModel == MeasureSpec.EXACTLY) {
+//            mSuggestHeight = height;
+//        }
+//
+//        if (isComputeStatusBarHeight) {
+//            mSuggestHeight += StatusBarUtil.getStatusBarHeight(getContext());
+//        }
+//        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST));
+//    }
 
     @Override
     protected Parcelable onSaveInstanceState() {
