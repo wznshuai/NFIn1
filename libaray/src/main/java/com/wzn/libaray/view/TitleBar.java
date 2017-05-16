@@ -140,11 +140,11 @@ public class TitleBar extends LinearLayout {
 
     private void init(AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         int dividerLineVisibility = View.VISIBLE;
-        float mSuggestHeight = 0f;
+        float mSuggestHeight = computeHeight();
         if (null != attrs) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.TitleBar, defStyleAttr, defStyleRes);
             dividerLineVisibility = a.getInt(R.styleable.TitleBar_dividing_line_visibility, 0);
-            mSuggestHeight = a.getDimension(R.styleable.TitleBar_EXACTLY_Height, computeHeight());
+            mSuggestHeight = a.getDimension(R.styleable.TitleBar_EXACTLY_Height, mSuggestHeight);
             a.recycle();
         }
         setOrientation(VERTICAL);
