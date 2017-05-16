@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatImageView;
@@ -24,7 +25,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wzn.libaray.R;
@@ -46,8 +46,8 @@ public class TitleBar extends LinearLayout {
 
     private final String TAG = "TitleBar";
 
-    private View mLineView, mLeftView;
-    private RelativeLayout mTitleView;
+    private View mLineView;
+    private ConstraintLayout mTitleView;
     private TextView mCenterTxt;
     private RadioGroup mRadioGroup;
     private List<RadioData> mRadioDatas;
@@ -59,7 +59,6 @@ public class TitleBar extends LinearLayout {
 
 
     private int mTitleTxtColor = Color.BLACK;
-
 
 
     public TitleBar(Context context) {
@@ -126,7 +125,7 @@ public class TitleBar extends LinearLayout {
 
     private void init(AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         int dividerLineVisibility = View.VISIBLE;
-        if(null != attrs){
+        if (null != attrs) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.TitleBar, defStyleAttr, defStyleRes);
             dividerLineVisibility = a.getInt(R.styleable.TitleBar_dividing_line_visibility, 0);
         }
@@ -134,13 +133,12 @@ public class TitleBar extends LinearLayout {
         setGravity(Gravity.CENTER_VERTICAL);
         setBackgroundColor(mTitleColor);
         setClickable(true);
-        if(getId() == -1)
+        if (getId() == -1)
             setId(ViewUtil.generateViewId());
 
         //初始化title栏按钮、标题所在layout
-        mTitleView = new RelativeLayout(getContext());
-        LayoutParams mTitleParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) computeHeight());
-        mTitleParams.weight = 1;
+        mTitleView = new ConstraintLayout(getContext());
+        LayoutParams mTitleParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
         addView(mTitleView, mTitleParams);
 
         //初始化标题栏下方分割线
@@ -161,7 +159,7 @@ public class TitleBar extends LinearLayout {
         return this;
     }
 
-    public TitleBar setLineViewVisibility(int visibility){
+    public TitleBar setLineViewVisibility(int visibility) {
         mLineView.setVisibility(visibility);
         return this;
     }
@@ -175,9 +173,12 @@ public class TitleBar extends LinearLayout {
     }
 
     private AppCompatImageView makeTitleButton() {
-        RelativeLayout.LayoutParams layoutParams =
-                new RelativeLayout.LayoutParams(getImageViewWidthAndHeight(),
-                        getImageViewWidthAndHeight());
+        ConstraintLayout.LayoutParams layoutParams =
+                new ConstraintLayout.LayoutParams(0,
+                        0);
+        layoutParams.dimensionRatio = "w,1:1";
+        layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+        layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
         AppCompatImageView imageButton = new AppCompatImageView(getContext());
         imageButton.setLayoutParams(layoutParams);
         imageButton.setBackgroundColor(Color.TRANSPARENT);
@@ -188,9 +189,11 @@ public class TitleBar extends LinearLayout {
     }
 
     private TextView makeTitleTxt() {
-        RelativeLayout.LayoutParams layoutParams =
-                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT);
+        ConstraintLayout.LayoutParams layoutParams =
+                new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        0);
+        layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+        layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
         TextView titleView = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.title_button, this, false);
         titleView.setSingleLine();
         titleView.setEllipsize(TextUtils.TruncateAt.END);
@@ -203,9 +206,13 @@ public class TitleBar extends LinearLayout {
     }
 
     private TextView makeCenterTxt() {
-        RelativeLayout.LayoutParams layoutParams =
-                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT);
+        ConstraintLayout.LayoutParams layoutParams =
+                new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        0);
+        layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+        layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
+        layoutParams.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
+        layoutParams.rightToRight = ConstraintLayout.LayoutParams.PARENT_ID;
         TextView titleView = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.title_button, this, false);
         titleView.setTextSize(16);
         titleView.setGravity(Gravity.CENTER);
@@ -217,9 +224,13 @@ public class TitleBar extends LinearLayout {
 
 
     private AppCompatRadioButton makeRadioButton() {
-        RadioGroup.LayoutParams layoutParams =
-                new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT,
+        ConstraintLayout.LayoutParams layoutParams =
+                new ConstraintLayout.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT,
                         RadioGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+        layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
+        layoutParams.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
+        layoutParams.rightToRight = ConstraintLayout.LayoutParams.PARENT_ID;
         AppCompatRadioButton radioButton = new AppCompatRadioButton(getContext());
         radioButton.setLayoutParams(layoutParams);
         return radioButton;
@@ -228,24 +239,23 @@ public class TitleBar extends LinearLayout {
     public TextView getRightTxtView() {
         TextView mRightTxt = makeTitleTxt();
         mRightTxt.setPadding(getCommonPaddingLeftRight(), 0, getCommonPaddingLeftRight(), 0);
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mRightTxt.getLayoutParams();
+        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mRightTxt.getLayoutParams();
         int id = ViewUtil.generateViewId();
         mRightTxt.setId(id);
         int size = getRightChildIds().size();
         if (size > 0) {
             int lastId = getRightChildIds().get(size - 1);
-            layoutParams.addRule(RelativeLayout.LEFT_OF, lastId);
+            layoutParams.rightToLeft = lastId;
         } else {
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            layoutParams.rightToRight = ConstraintLayout.LayoutParams.PARENT_ID;
         }
-        layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
         getRightChildIds().add(id);
         addView(mRightTxt, layoutParams);
 
         return mRightTxt;
     }
 
-    private void addView(View view, RelativeLayout.LayoutParams layoutParams) {
+    private void addView(View view, ConstraintLayout.LayoutParams layoutParams) {
         if (null != mTitleView)
             mTitleView.addView(view, layoutParams);
     }
@@ -254,18 +264,17 @@ public class TitleBar extends LinearLayout {
     public AppCompatImageView getRightImgView() {
 
         AppCompatImageView mRightImg = makeTitleButton();
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mRightImg.getLayoutParams();
+        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mRightImg.getLayoutParams();
         int size = getRightChildIds().size();
         int id = ViewUtil.generateViewId();
         mRightImg.setId(id);
         if (size > 0) {
             int lastId = getRightChildIds().get(size - 1);
             layoutParams.rightMargin = getCommonPaddingLeftRight();
-            layoutParams.addRule(RelativeLayout.LEFT_OF, lastId);
+            layoutParams.rightToLeft = lastId;
         } else {
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            layoutParams.rightToRight = ConstraintLayout.LayoutParams.PARENT_ID;
         }
-        layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
         getRightChildIds().add(id);
         addView(mRightImg, layoutParams);
 
@@ -284,18 +293,17 @@ public class TitleBar extends LinearLayout {
     public AppCompatImageView getLeftImgView() {
 
         AppCompatImageView mLeftImg = makeTitleButton();
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLeftImg.getLayoutParams();
+        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mLeftImg.getLayoutParams();
         int size = getLeftChildIds().size();
         int id = ViewUtil.generateViewId();
         mLeftImg.setId(id);
         if (size > 0) {
             int lastId = getLeftChildIds().get(size - 1);
             layoutParams.leftMargin = getCommonPaddingLeftRight();
-            layoutParams.addRule(RelativeLayout.RIGHT_OF, lastId);
+            layoutParams.leftToRight = lastId;
         } else {
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            layoutParams.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
         }
-        layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
         getLeftChildIds().add(id);
         mTitleView.addView(mLeftImg, layoutParams);
 
@@ -307,8 +315,7 @@ public class TitleBar extends LinearLayout {
             mTitleView.removeView(mRadioGroup);
         if (null == mCenterTxt) {//如果为null 则还没加入到TITLE栏
             mCenterTxt = makeCenterTxt();
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mCenterTxt.getLayoutParams();
-            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+            ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mCenterTxt.getLayoutParams();
             mCenterTxt.setClickable(false);
             mCenterTxt.setGravity(Gravity.CENTER);
             mCenterTxt.setCompoundDrawablePadding(dp2px(getContext(), 3));
@@ -323,10 +330,9 @@ public class TitleBar extends LinearLayout {
             mTitleView.removeView(mCenterTxt);
         if (null == mRadioGroup && null != radioDatas) {
             this.mRadioDatas = radioDatas;
-            RelativeLayout.LayoutParams layoutParams =
-                    new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+            ConstraintLayout.LayoutParams layoutParams =
+                    new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT);
-            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
             mRadioGroup = new RadioGroup(getContext());
             mRadioGroup.setOrientation(HORIZONTAL);
             int size = radioDatas.size();
@@ -342,7 +348,7 @@ public class TitleBar extends LinearLayout {
                 if (i == 0)
                     ViewCompat.setBackground(radioButton,
                             ContextCompat.getDrawable(getContext(), R.drawable.title_radio_bg_left));
-                else if(i == size - 1)
+                else if (i == size - 1)
                     ViewCompat.setBackground(radioButton,
                             ContextCompat.getDrawable(getContext(), R.drawable.title_radio_bg_right));
                 else
@@ -372,17 +378,16 @@ public class TitleBar extends LinearLayout {
 
         TextView mLeftTxt = makeTitleTxt();
         mLeftTxt.setPadding(getCommonPaddingLeftRight(), 0, getCommonPaddingLeftRight(), 0);
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mLeftTxt.getLayoutParams();
+        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mLeftTxt.getLayoutParams();
         int size = getLeftChildIds().size();
         int id = ViewUtil.generateViewId();
         mLeftTxt.setId(id);
         if (size > 0) {
             int lastId = getLeftChildIds().get(size - 1);
-            layoutParams.addRule(RelativeLayout.RIGHT_OF, lastId);
+            layoutParams.leftToRight = lastId;
         } else {
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            layoutParams.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
         }
-        layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
         getLeftChildIds().add(id);
         mTitleView.addView(mLeftTxt, layoutParams);
 
@@ -392,30 +397,24 @@ public class TitleBar extends LinearLayout {
 
     public View getLeftView(int layoutId) {
 
-        if (null == mLeftView) {
-            mLeftView = LayoutInflater.from(getContext()).inflate(layoutId, this, false);
+        View mLeftView = LayoutInflater.from(getContext()).inflate(layoutId, this, false);
 
-            if (ViewCompat.isPaddingRelative(mLeftView)) {
-                ViewCompat.setPaddingRelative(mLeftView,
-                        ViewCompat.getPaddingStart(mLeftView) == 0 ? getCommonPaddingLeftRight() : ViewCompat.getPaddingStart(mLeftView),
-                        0,
-                        ViewCompat.getPaddingEnd(mLeftView) == 0 ? getCommonPaddingLeftRight() : ViewCompat.getPaddingEnd(mLeftView),
-                        0
-                );
-            } else {
-                mLeftView.setPadding(mLeftView.getLeft() == 0 ? getCommonPaddingLeftRight() : mLeftView.getLeft(),
-                        0,
-                        mLeftView.getRight() == 0 ? getCommonPaddingLeftRight() : mLeftView.getPaddingRight(),
-                        0
-                );
-            }
-
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(mLeftView.getLayoutParams());
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
-            ;
-            mTitleView.addView(mLeftView, layoutParams);
+        int id = mLeftView.getId();
+        if (id == -1) {
+            id = ViewUtil.generateViewId();
+            mLeftView.setId(id);
         }
+        int size = getLeftChildIds().size();
+
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(mLeftView.getLayoutParams());
+        if (size > 0) {
+            int lastId = getLeftChildIds().get(size - 1);
+            layoutParams.leftToRight = lastId;
+        } else {
+            layoutParams.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
+        }
+        getLeftChildIds().add(id);
+        mTitleView.addView(mLeftView, layoutParams);
 
         return mLeftView;
     }
@@ -430,16 +429,15 @@ public class TitleBar extends LinearLayout {
 
     public TitleBar resetTitleBar() {
         mTitleView.removeAllViews();
-        mLeftView = null;
         mCenterTxt = null;
         setVisibility(VISIBLE);
         return this;
     }
 
-    public TitleBar removeAllRightButtons(){
-        if(null != mRightChildIds){
+    public TitleBar removeAllRightButtons() {
+        if (null != mRightChildIds) {
             Iterator<Integer> iterator = mRightChildIds.iterator();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 mTitleView.removeView(mTitleView.findViewById(iterator.next()));
                 iterator.remove();
             }
@@ -447,10 +445,10 @@ public class TitleBar extends LinearLayout {
         return this;
     }
 
-    public TitleBar removeAllLeftButtons(){
-        if(null != mLeftChildIds){
+    public TitleBar removeAllLeftButtons() {
+        if (null != mLeftChildIds) {
             Iterator<Integer> iterator = mLeftChildIds.iterator();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 mTitleView.removeView(mTitleView.findViewById(iterator.next()));
                 iterator.remove();
             }
@@ -460,14 +458,19 @@ public class TitleBar extends LinearLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
-        float maxSize = computeHeight();
-        if (isComputeStatusBarHeight) {
-            maxSize += StatusBarUtil.getStatusBarHeight(getContext());
+        int heightModel = MeasureSpec.getMode(heightMeasureSpec);
+        float suggestHeight = computeHeight();
+
+        if (heightModel == MeasureSpec.EXACTLY) {
+            suggestHeight = height;
         }
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec),
-                /*(int) Math.min(height, maxSize)*/ (int) maxSize);
+
+        if (isComputeStatusBarHeight) {
+            suggestHeight += StatusBarUtil.getStatusBarHeight(getContext());
+        }
+
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec((int) suggestHeight, MeasureSpec.EXACTLY));
     }
 
 
