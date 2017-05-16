@@ -1,7 +1,10 @@
 package com.wzn.libaray.utils;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
 import android.util.TypedValue;
 
 import java.io.File;
@@ -54,23 +57,23 @@ public class CommonUtils {
      * 解压缩一个文件
      *
      * @param zipFile 压缩文件
-     * @param desDir 解压缩的目标目录
+     * @param desDir  解压缩的目标目录
      * @throws IOException 当解压缩过程出错时抛出
      */
     public static void upZipFile(File zipFile, File desDir) throws IOException {
-       String tag = "unzip file";
+        String tag = "unzip file";
         if (!desDir.exists()) {
             desDir.mkdirs();
         }
         ZipFile zf = new ZipFile(zipFile);
-        for (Enumeration<?> entries = zf.entries(); entries.hasMoreElements();) {
-            ZipEntry entry = ((ZipEntry)entries.nextElement());
+        for (Enumeration<?> entries = zf.entries(); entries.hasMoreElements(); ) {
+            ZipEntry entry = ((ZipEntry) entries.nextElement());
             InputStream in = zf.getInputStream(entry);
 
-            File desFile = new File(desDir,  File.separator + entry.getName());
-            if(entry.isDirectory()){
+            File desFile = new File(desDir, File.separator + entry.getName());
+            if (entry.isDirectory()) {
                 desFile.mkdirs();
-            }else {
+            } else {
                 Logger.d(tag, "unzip file : " + desFile.getPath());
                 if (!desFile.exists()) {
                     Logger.d(tag, desFile.getPath() + "  not exists");
@@ -78,12 +81,12 @@ public class CommonUtils {
                     if (!fileParentDir.exists()) {
                         Logger.d(tag, "parent file not exists : " + fileParentDir.getPath());
                         Logger.d(tag, "create parent dirs result is " + fileParentDir.mkdirs());
-                    }else {
-                        if(!fileParentDir.isDirectory()){
+                    } else {
+                        if (!fileParentDir.isDirectory()) {
                             Logger.d(tag, "parent file " + fileParentDir.getPath() + "  already exists, but not a directory");
                             fileParentDir.deleteOnExit();
                             fileParentDir.mkdirs();
-                        }else {
+                        } else {
                             Logger.d(tag, "parent file " + fileParentDir.getPath() + "  already exists");
                         }
                     }
@@ -154,6 +157,11 @@ public class CommonUtils {
         DecimalFormat decimalFormat = new DecimalFormat(pattern);
         decimalFormat.setRoundingMode(RoundingMode.HALF_EVEN);
         return decimalFormat.format(l);
+    }
+
+    public static void copyToClipBoard(Context context, String lable, @NonNull String value) {
+        ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        cmb.setPrimaryClip(ClipData.newPlainText(lable, value));
     }
 
 }
