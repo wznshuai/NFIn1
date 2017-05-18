@@ -49,6 +49,7 @@ public class TitleBar extends LinearLayout {
     private View mLineView, mStatusbarView;
     private ConstraintLayout mTitleView;
     private TextView mCenterTxt;
+    private ImageView mCenterImgView;
     private RadioGroup mRadioGroup;
     private List<RadioData> mRadioDatas;
 
@@ -88,15 +89,17 @@ public class TitleBar extends LinearLayout {
     }
 
     public TitleBar setIsComputeStatusBarHeight(boolean isComputeStatusBarHeight) {
-        if (isComputeStatusBarHeight) {
-            if (null == mStatusbarView) {
-                makeStatusbarView();
-                addView(mStatusbarView, 0);
-            }
-        } else {
-            if (null != mStatusbarView) {
-                removeView(mStatusbarView);
-                mStatusbarView = null;
+        if(StatusBarUtil.isSupport()){
+            if (isComputeStatusBarHeight) {
+                if (null == mStatusbarView) {
+                    makeStatusbarView();
+                    addView(mStatusbarView, 0);
+                }
+            } else {
+                if (null != mStatusbarView) {
+                    removeView(mStatusbarView);
+                    mStatusbarView = null;
+                }
             }
         }
         return this;
@@ -202,6 +205,20 @@ public class TitleBar extends LinearLayout {
         imageButton.setBackgroundColor(Color.TRANSPARENT);
         imageButton.setPadding(getCommonPaddingLeftRight(), getCommonPaddingTopBottom(),
                 getCommonPaddingLeftRight(), getCommonPaddingTopBottom());
+        imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        return imageButton;
+    }
+
+    private AppCompatImageView makeCenterImgView() {
+        ConstraintLayout.LayoutParams layoutParams =
+                new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        0);
+        layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+        layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
+        layoutParams.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
+        layoutParams.rightToRight = ConstraintLayout.LayoutParams.PARENT_ID;
+        AppCompatImageView imageButton = new AppCompatImageView(getContext());
+        imageButton.setLayoutParams(layoutParams);
         imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
         return imageButton;
     }
@@ -331,6 +348,8 @@ public class TitleBar extends LinearLayout {
     public TextView getCenterTitleView() {
         if (null != mRadioGroup)
             mTitleView.removeView(mRadioGroup);
+        if(null != mCenterImgView)
+            mTitleView.removeView(mCenterImgView);
         if (null == mCenterTxt) {//如果为null 则还没加入到TITLE栏
             mCenterTxt = makeCenterTxt();
             ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mCenterTxt.getLayoutParams();
@@ -343,9 +362,23 @@ public class TitleBar extends LinearLayout {
         return mCenterTxt;
     }
 
+    public ImageView getCenterImageView() {
+        if (null != mRadioGroup)
+            mTitleView.removeView(mRadioGroup);
+        if(null != mCenterTxt)
+            mTitleView.removeView(mCenterTxt);
+        if (null == mCenterImgView) {//如果为null 则还没加入到TITLE栏
+            mCenterImgView = makeCenterImgView();
+            mTitleView.addView(mCenterImgView, mCenterImgView.getLayoutParams());
+        }
+        return mCenterImgView;
+    }
+
     public RadioGroup getCenterRadioGroup(final List<RadioData> radioDatas, final OnTitleRadioCheckedListener onTitleRadioCheckedListener) {
         if (null != mCenterTxt)
             mTitleView.removeView(mCenterTxt);
+        if(null != mCenterImgView)
+            mTitleView.removeView(mCenterImgView);
         if (null == mRadioGroup && null != radioDatas) {
             this.mRadioDatas = radioDatas;
             ConstraintLayout.LayoutParams layoutParams =
