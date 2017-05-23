@@ -403,7 +403,7 @@ public class TitleBar extends LinearLayout {
      * 如果已添加则返回，没添加返回null
      * @return
      */
-    public RadioGroup geAddedtCenterRadioGroup() {
+    public RadioGroup getAddedtCenterRadioGroup() {
         return mRadioGroup;
     }
 

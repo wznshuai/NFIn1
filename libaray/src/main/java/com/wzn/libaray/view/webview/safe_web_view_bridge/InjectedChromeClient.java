@@ -18,7 +18,7 @@ import android.webkit.WebView;
 public class InjectedChromeClient extends WebChromeClient {
     private final String TAG = "InjectedChromeClient";
     private JsCallJava mJsCallJava;
-    private boolean mIsInjectedJS;
+    private volatile boolean mIsInjectedJS;
 
     public InjectedChromeClient(String injectedName, Object injectedObj) {
         mJsCallJava = new JsCallJava(injectedName, injectedObj);
@@ -37,6 +37,7 @@ public class InjectedChromeClient extends WebChromeClient {
 
     @Override
     public void onProgressChanged(WebView view, int newProgress) {
+        super.onProgressChanged(view, newProgress);
         //为什么要在这里注入JS
         //1 OnPageStarted中注入有可能全局注入不成功，导致页面脚本上所有接口任何时候都不可用
         //2 OnPageFinished中注入，虽然最后都会全局注入成功，但是完成时间有可能太晚，当页面在初始化调用接口函数时会等待时间过长
@@ -44,14 +45,14 @@ public class InjectedChromeClient extends WebChromeClient {
         //为什么是进度大于25%才进行注入，因为从测试看来只有进度大于这个数字页面才真正得到框架刷新加载，保证100%注入成功
         if (newProgress <= 25) {
             mIsInjectedJS = false;
-        } else if (!mIsInjectedJS) {
+        } else if (newProgress == 100 && !mIsInjectedJS) {
+            mIsInjectedJS = true;
             view.loadUrl(mJsCallJava.getPreloadInterfaceJS());
             view.loadUrl("javascript:window.document.dispatchEvent(new Event('androidBridgeReady'))");
-            mIsInjectedJS = true;
-            Log.d(TAG, " inject js interface completely on progress " + newProgress);
+            Log.d(TAG, " inject js interface completely on progress " + newProgress + "\n url is " + view.getUrl()
+             +"\n Original url is " + view.getOriginalUrl());
 
         }
-        super.onProgressChanged(view, newProgress);
     }
 
     @Override
