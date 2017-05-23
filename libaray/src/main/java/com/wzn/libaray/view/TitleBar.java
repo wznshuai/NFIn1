@@ -345,6 +345,11 @@ public class TitleBar extends LinearLayout {
         return mLeftImg;
     }
 
+
+    /**
+     * 返回一个新的并添加到titlebar
+     * @return
+     */
     public TextView getCenterTitleView() {
         if (null != mRadioGroup)
             mTitleView.removeView(mRadioGroup);
@@ -362,6 +367,26 @@ public class TitleBar extends LinearLayout {
         return mCenterTxt;
     }
 
+    /**
+     * 如果已添加则返回，没添加返回null
+     * @return
+     */
+    public TextView getAddedCenterTitleView(){
+        return mCenterTxt;
+    }
+
+    /**
+     * 如果已添加则返回，没添加返回null
+     * @return
+     */
+    public ImageView getAddedCenterImageView(){
+        return mCenterImgView;
+    }
+
+    /**
+     * 返回一个新的并添加到titlebar
+     * @return
+     */
     public ImageView getCenterImageView() {
         if (null != mRadioGroup)
             mTitleView.removeView(mRadioGroup);
@@ -374,6 +399,20 @@ public class TitleBar extends LinearLayout {
         return mCenterImgView;
     }
 
+    /**
+     * 如果已添加则返回，没添加返回null
+     * @return
+     */
+    public RadioGroup geAddedtCenterRadioGroup() {
+        return mRadioGroup;
+    }
+
+    /**
+     * 返回一个新的RadioGroup 并添加到titlebar
+     * @param radioDatas
+     * @param onTitleRadioCheckedListener
+     * @return
+     */
     public RadioGroup getCenterRadioGroup(final List<RadioData> radioDatas, final OnTitleRadioCheckedListener onTitleRadioCheckedListener) {
         if (null != mCenterTxt)
             mTitleView.removeView(mCenterTxt);
