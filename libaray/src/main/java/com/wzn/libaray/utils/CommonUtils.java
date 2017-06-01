@@ -22,6 +22,7 @@ import java.util.zip.ZipFile;
 
 public class CommonUtils {
     public static final String pattern = "#,###,##0.00";
+    public static final String patternNumberInt = "#,###,##0";
 
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
