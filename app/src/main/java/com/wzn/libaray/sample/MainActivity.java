@@ -27,5 +27,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, ManualAddTitleBarActivity.class));
             }
         });
+
+        findViewById(R.id.go_test_lightStatusbar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, TestLightStatusbarActivity.class));
+            }
+        });
     }
 }

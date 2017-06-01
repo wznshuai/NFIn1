@@ -16,6 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ManualAddTitleBarActivity"/>
+        <activity android:name=".TestLightStatusbarActivity" />
     </application>
 
 </manifest>

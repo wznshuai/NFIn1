@@ -25,9 +25,10 @@ public class StatusBarUtil {
     private static final String CUSTOM_TOP_MARGIN = "CUSTOM_TOP_MARGIN";
     private static final int DEFAULT_COLOR = Color.BLACK;
 
-    public static boolean isSupport(){
+    public static boolean isSupport() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
+
 
     /**
      * @param activity
@@ -370,6 +371,17 @@ public class StatusBarUtil {
             contentView.removeViewAt(1);
         }
         contentView.addView(createTranslucentStatusBarView(activity, statusBarAlpha));
+    }
+
+    public static void setStatusBarisLight(Activity activity, boolean light) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (light)
+                getContentView(activity).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            else {
+                View v = getContentView(activity);
+                v.setSystemUiVisibility(v.getSystemUiVisibility() & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+        }
     }
 
     /**
