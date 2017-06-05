@@ -55,6 +55,10 @@ public class DeviceInfo {
         return Build.BRAND;
     }
 
+    public static String getManufacturer() {
+        return Build.MANUFACTURER;
+    }
+
     public static String getMobileInfo() {
         StringBuilder sb = new StringBuilder();
         try {
