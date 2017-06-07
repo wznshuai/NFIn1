@@ -20,6 +20,8 @@ import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.wzn.libaray.utils.Logger;
 
+import java.io.File;
+
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
@@ -87,6 +89,11 @@ public class ImageUtils {
     public static void showImage(Context context, String url, ImageView intoView) {
         Glide.with(context).
                 load(url).into(new GlideDrawableImageViewTarget(intoView));
+    }
+
+    public static void showImage(Context context, File file, ImageView intoView) {
+        Glide.with(context).
+                load(file).into(new GlideDrawableImageViewTarget(intoView));
     }
 
     public static void showImage(Context context, int resId, ImageView intoView) {

@@ -1,5 +1,8 @@
 package com.wzn.libaray.utils;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -102,6 +105,23 @@ public class FileUtil {
         }
 
         return ret;
+    }
+
+    public static void copyImage2Data(Context context, int resID, String path, String fileName) throws IOException {
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resID);
+        saveBitmapToPath(bitmap,path,fileName);
+    }
+
+    public static void saveBitmapToPath( Bitmap bitmap,String path,  String fileName) throws IOException {
+        File dirFile =new File(path);
+        if (!dirFile.exists()) {
+            dirFile.mkdir();
+        }
+        File myCaptureFile =new  File(path + File.separator + fileName);
+        BufferedOutputStream bos =new  BufferedOutputStream(new FileOutputStream(myCaptureFile));
+        bitmap.compress(Bitmap.CompressFormat.PNG, 80, bos);
+        bos.flush();
+        bos.close();
     }
 
 }
