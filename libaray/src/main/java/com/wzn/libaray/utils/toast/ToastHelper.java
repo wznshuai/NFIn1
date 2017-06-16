@@ -1,6 +1,8 @@
 package com.wzn.libaray.utils.toast;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.widget.Toast;
 
 /**
@@ -37,12 +39,18 @@ public class ToastHelper {
     public void showToast(String msg) {
         if (mContext == null)
             return;
-        if (mToast == null) {
-            mToast = CustomToast.makeText(mContext, msg, Toast.LENGTH_SHORT);
+
+        if (mContext.checkCallingPermission(Manifest.permission.SYSTEM_ALERT_WINDOW) == PackageManager.PERMISSION_GRANTED) {
+
+            if (mToast == null) {
+                mToast = CustomToast.makeText(mContext, msg, Toast.LENGTH_SHORT);
+            } else {
+                mToast.setText(msg);
+            }
+            mToast.show();
         } else {
-            mToast.setText(msg);
+            Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
         }
-        mToast.show();
     }
 
     public void showToast(int resId) {
