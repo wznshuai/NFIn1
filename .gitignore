@@ -30,8 +30,6 @@ proguard/
 # Log Files
 *.log
 
-local.properties
-
 # Android Studio Navigation editor temp files
 .navigation/
 
@@ -40,5 +38,4 @@ captures/
 
 # Intellij
 *.iml
-.idea/workspace.xml
-.idea/libraries
+.idea/

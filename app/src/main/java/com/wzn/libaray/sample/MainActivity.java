@@ -2,12 +2,17 @@ package com.wzn.libaray.sample;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.madai.annotation.ReleaseUtils;
 import com.wzn.libaray.sample.base.BaseTitleBarActivity;
 import com.wzn.libaray.utils.StatusBarUtil;
+import com.wzn.libaray.utils.toast.ToastHelper;
+
+import java.io.File;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -18,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
+        String md5 = MD5Util.INSTANCE.getFileMD5String(new File(Environment.getExternalStorageDirectory().getPath() + "/TengNiu/p2p/temp/patch.temp"));
+        ToastHelper.init(this);
+        ToastHelper.getInstance().showToast(md5);
     }
 
     protected void initViews() {
@@ -34,5 +42,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, TestLightStatusbarActivity.class));
             }
         });
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        ReleaseUtils.doRelease();
     }
 }
