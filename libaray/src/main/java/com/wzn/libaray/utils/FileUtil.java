@@ -80,7 +80,6 @@ public class FileUtil {
                     substr = new String(substr.getBytes("8859_1"), "GB2312");
 
                 } catch (UnsupportedEncodingException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 ret = new File(ret, substr);
@@ -95,7 +94,6 @@ public class FileUtil {
                 substr = new String(substr.getBytes("8859_1"), "GB2312");
                 Log.d("upZipFile", "substr = " + substr);
             } catch (UnsupportedEncodingException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
