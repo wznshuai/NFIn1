@@ -51,13 +51,18 @@ public class InjectedChromeClient extends WebChromeClient {
             view.loadUrl("javascript:window.document.dispatchEvent(new Event('androidBridgeReady'))");
             Log.d(TAG, " inject js interface completely on progress " + newProgress + "\n url is " + view.getUrl()
              +"\n Original url is " + view.getOriginalUrl());
-
+            onBridgeReady(view);
         }
+
     }
 
     @Override
     public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
         result.confirm(mJsCallJava.call(view, message));
         return true;
+    }
+
+    public void onBridgeReady(WebView view){
+
     }
 }
