@@ -11,4 +11,11 @@
         </attr>
         <attr name="EXACTLY_Height" format="dimension"/>
     </declare-styleable>
+
+    <!-- pointview -->
+
+    <declare-styleable name="PointView">
+        <attr name="point_selected_color" format="color"/>
+        <attr name="point_unselected_color" format="color"/>
+    </declare-styleable>
 </resources>
