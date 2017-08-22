@@ -3,13 +3,10 @@ package com.wzn.libaray.sample;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.madai.annotation.ReleaseUtils;
-import com.wzn.libaray.sample.base.BaseTitleBarActivity;
-import com.wzn.libaray.utils.StatusBarUtil;
 import com.wzn.libaray.utils.toast.ToastHelper;
 
 import java.io.File;

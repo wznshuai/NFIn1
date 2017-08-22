@@ -271,6 +271,8 @@ public class Logger {
             return;
         }
 
+        if(null == message)
+            message = "null";
 
         logTopBorder(logType, tag);
         logHeaderContent(logType, tag, methodCount);
