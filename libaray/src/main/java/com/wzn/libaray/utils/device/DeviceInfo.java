@@ -168,6 +168,16 @@ public class DeviceInfo {
         }
     }
 
+    public static String getNetworkName(Context context){
+        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null) {
+            return networkInfo.getTypeName();
+        } else {
+            return null;
+        }
+    }
+
 
     public static String getDeviceSize(Context context) {
         WindowManager wm = (WindowManager) context
