@@ -123,7 +123,7 @@ ext {
     isRelease = false
     resposiryReleaseUrl = "http://101.231.83.139:8081/nexus/content/repositories/releases/"
     resposirySnapshotUrl = "http://101.231.83.139:8081/nexus/content/repositories/snapshots/"
-    resposiryUrl = isRelease?resposiryReleaseUrl:resposirySnapshotUrl
+    resposiryUrl = isRelease ? resposiryReleaseUrl : resposirySnapshotUrl
 }
 
 publishing {
@@ -147,7 +147,7 @@ publishing {
             artifact sourcesJar
             artifactId "usefulLibrary"
             groupId 'com.madai.android'
-            version version
+            version isRelease ? version : "${version}-SNAPSHOT"
 
             pom.withXml {
                 def dependenciesNode = asNode().appendNode('dependencies')
