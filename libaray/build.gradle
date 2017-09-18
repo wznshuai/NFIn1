@@ -117,10 +117,10 @@ artifacts {
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
-version = "1.5.3"
+version = "1.5.5"
 
 ext {
-    isRelease = false
+    isRelease = true
     resposiryReleaseUrl = "http://101.231.83.139:8081/nexus/content/repositories/releases/"
     resposirySnapshotUrl = "http://101.231.83.139:8081/nexus/content/repositories/snapshots/"
     resposiryUrl = isRelease ? resposiryReleaseUrl : resposirySnapshotUrl
