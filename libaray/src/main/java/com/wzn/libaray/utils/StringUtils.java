@@ -38,4 +38,35 @@ public class StringUtils {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return span;
     }
+
+    /**
+     * @param patternString 判断条件，为正则表达式
+     * @param input         需要进行判断的字符串
+     * @return true，符合给定条件；false，不符合给定条件
+     */
+    public static boolean islegal(String patternString, String input) {
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(input);
+        if (matcher.matches()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 字符串是否包含匹配的字符
+     *
+     * @param input
+     * @return
+     */
+    public static boolean isContain(String patternString, String input) {
+        Pattern p = Pattern.compile(patternString);
+        // 判断ascii码
+        Matcher m = p.matcher(input);
+        if (m.find()) {
+            return true;
+        }
+        return false;
+    }
 }
