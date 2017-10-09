@@ -117,7 +117,7 @@ artifacts {
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
-version = "1.5.5"
+version = "1.5.9"
 
 ext {
     isRelease = true
@@ -127,9 +127,9 @@ ext {
 }
 
 publishing {
-//    repositories {
-//        mavenLocal()
-//    }
+    repositories {
+        mavenLocal()
+    }
 
     repositories {
         maven {

@@ -53,13 +53,15 @@ object PermissionUtil {
         rxPermissions
                 .request(*permission)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { granted ->
+                .subscribe({ granted ->
                     if (granted) {
                         onPermissionResultListener?.onPermissionGranted()
                     } else {
                         onPermissionResultListener?.onPermissionGrantCancel()
                     }
-                }
+                }, {
+                    it.printStackTrace()
+                })
     }
 
 }
