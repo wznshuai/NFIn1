@@ -1,5 +1,6 @@
 package com.madai.util.network
 
+import android.text.TextUtils
 import com.wzn.libaray.sample.MD5Util
 import okhttp3.*
 import rx.Observable
@@ -19,7 +20,7 @@ class DownloadUtil private constructor(val builder: Builder) {
         lateinit var fileUrl: String
         lateinit var file: File
         var md5: String = ""
-        lateinit var callFacatory: Call.Factory
+        var callFacatory: Call.Factory? = null
         var loopTime: Long = 300
 
         fun file(file: File): Builder {
@@ -66,65 +67,64 @@ class DownloadUtil private constructor(val builder: Builder) {
 
     fun downLoadFile(): Observable<Int> {
         return Observable
-                .create<Int>(SyncOnSubscribe
-                        .createStateless {
-                            if (builder.file.exists() && MD5Util.getFileMD5String(builder.file) == builder.md5) {
-                                it.onNext(100)
-                                it.onCompleted()
-                                return@createStateless
-                            }
-                            builder.file.deleteOnExit()
-                            val request = Request.Builder().url(builder.fileUrl).build()
-                            val call = builder.callFacatory.newCall(request)
-                            call.enqueue(object : Callback {
+                .unsafeCreate<Int> {
+                    if (builder.file.exists() && !TextUtils.isEmpty(builder.md5) && MD5Util.getFileMD5String(builder.file) == builder.md5) {
+                        it.onNext(100)
+                        it.onCompleted()
+                        return@unsafeCreate
+                    }
+                    builder.file.deleteOnExit()
+                    val request = Request.Builder().url(builder.fileUrl).build()
+                    val call = builder.callFacatory?.newCall(request)
+                    call?.enqueue(object : Callback {
 
-                                override fun onFailure(call: Call, e: IOException) {
-                                    e.printStackTrace()
-                                }
+                        override fun onFailure(call: Call, e: IOException) {
+                            e.printStackTrace()
+                        }
 
-                                @Throws(IOException::class)
-                                override fun onResponse(call: Call, response: Response) {
-                                    val body = response.body()
-                                    try {
-                                        var inputStream: InputStream? = null
-                                        var outputStream: FileOutputStream? = null
+                        @Throws(IOException::class)
+                        override fun onResponse(call: Call, response: Response) {
+                            val body = response.body()
+                            try {
+                                var inputStream: InputStream? = null
+                                var outputStream: FileOutputStream? = null
 
-                                        val fileSize = body?.contentLength() ?: 0
-                                        var fileSizeDownloaded: Long = 0
+                                val fileSize = body?.contentLength() ?: 0
+                                var fileSizeDownloaded: Long = 0
 
-                                        try {
-                                            val fileReader = ByteArray(4096)
+                                try {
+                                    val fileReader = ByteArray(4096)
 
-                                            inputStream = body?.byteStream()
-                                            outputStream = FileOutputStream(builder.file)
+                                    inputStream = body?.byteStream()
+                                    outputStream = FileOutputStream(builder.file)
 
-                                            while (true) {
-                                                val read = inputStream?.read(fileReader) ?: -1
-                                                if (read == -1) {
-                                                    break
-                                                }
-                                                outputStream.write(fileReader, 0, read)
-                                                fileSizeDownloaded += read.toLong()
-                                                val progress = (fileSizeDownloaded * 1.0f / fileSize * 100).toInt()
-                                                it.onNext(progress)
-                                                if (progress == 100)
-                                                    it.onCompleted()
-                                            }
-                                            outputStream.flush()
-                                        } catch (e: IOException) {
-                                            it.onError(e)
-                                            it.onCompleted()
-                                        } finally {
-                                            outputStream?.close()
-                                            inputStream?.close()
+                                    while (true) {
+                                        val read = inputStream?.read(fileReader) ?: -1
+                                        if (read == -1) {
+                                            break
                                         }
-                                    } catch (e: IOException) {
-                                        it.onError(e)
-                                        it.onCompleted()
+                                        outputStream.write(fileReader, 0, read)
+                                        fileSizeDownloaded += read.toLong()
+                                        val progress = (fileSizeDownloaded * 1.0f / fileSize * 100).toInt()
+                                        it.onNext(progress)
+                                        if (progress == 100)
+                                            it.onCompleted()
                                     }
-
+                                    outputStream.flush()
+                                } catch (e: IOException) {
+                                    it.onError(e)
+                                    it.onCompleted()
+                                } finally {
+                                    outputStream?.close()
+                                    inputStream?.close()
                                 }
-                            })
-                        }).sample(builder.loopTime, TimeUnit.MILLISECONDS)
+                            } catch (e: IOException) {
+                                it.onError(e)
+                                it.onCompleted()
+                            }
+
+                        }
+                    })
+                }.sample(builder.loopTime, TimeUnit.MILLISECONDS)
     }
 }
