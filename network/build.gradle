@@ -3,10 +3,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
-version = "1.0.2"
+version = "1.0.5" //跳过1.0.6
 
 ext {
-    isRelease = false
+    isRelease = true
     resposiryReleaseUrl = "http://101.231.83.139:8081/nexus/content/repositories/releases/"
     resposirySnapshotUrl = "http://101.231.83.139:8081/nexus/content/repositories/snapshots/"
     resposiryUrl = isRelease ? resposiryReleaseUrl : resposirySnapshotUrl
