@@ -13,7 +13,7 @@ dependencies {
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
-version = "1.0.1"
+version = "1.0.2"
 
 publishing {
     repositories {
@@ -32,7 +32,7 @@ publishing {
 
     publications {
         maven(MavenPublication) {
-            artifact "${project.buildDir}/libs/${project.name}.jar"
+            artifact "${project.buildDir}/libs/${project.name}-${version}.jar"
             artifactId "annotation-processor"
             groupId 'com.madai.android'
             version version

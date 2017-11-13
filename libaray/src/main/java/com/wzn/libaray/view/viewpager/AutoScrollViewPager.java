@@ -164,9 +164,8 @@ public class AutoScrollViewPager extends LoopViewPager {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        super.onInterceptTouchEvent(ev);
-        int action = MotionEventCompat.getActionMasked(ev);
-        return action != MotionEvent.ACTION_CANCEL && action != MotionEvent.ACTION_UP;
+        getParent().requestDisallowInterceptTouchEvent(true);
+        return super.onInterceptTouchEvent(ev);
     }
 
     /**
