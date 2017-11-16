@@ -1,70 +1,10 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'maven'
-apply plugin: 'maven-publish'
-
-version = "1.0.5" //跳过1.0.6
-
-ext {
-    isRelease = true
-    resposiryReleaseUrl = "http://101.231.83.139:8081/nexus/content/repositories/releases/"
-    resposirySnapshotUrl = "http://101.231.83.139:8081/nexus/content/repositories/snapshots/"
-    resposiryUrl = isRelease ? resposiryReleaseUrl : resposirySnapshotUrl
-}
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-artifacts {
-    archives sourcesJar
-}
-
-publishing {
-    repositories {
-        mavenLocal()
-    }
-
-    repositories {
-        maven {
-            credentials {
-                username 'deployment'
-                password '8a7udFk7J'
-            }
-            url resposiryUrl
-        }
-    }
-
-    publications {
-        maven(MavenPublication) {
-            artifact "${project.buildDir}/outputs/aar/${project.name}-release.aar"
-            artifact sourcesJar
-            artifactId "network"
-            groupId 'com.madai.android'
-            version isRelease ? version : "${version}-SNAPSHOT"
-
-            pom.withXml {
-                def dependenciesNode = asNode().appendNode('dependencies')
-
-                //Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
-                configurations.compile.allDependencies.each {
-                    println "dependency " + it
-                    if(it.group != null && it.name != null && it.version != null){
-                        def dependencyNode = dependenciesNode.appendNode('dependency')
-                        dependencyNode.appendNode('groupId', it.group)
-                        dependencyNode.appendNode('artifactId', it.name)
-                        dependencyNode.appendNode('version', it.version)
-                    }
-                }
-            }
-        }
-    }
-}
+apply from: './publish.gradle'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '26.0.3'
 
     defaultConfig {
         minSdkVersion 14

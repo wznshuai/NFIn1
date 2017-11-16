@@ -1,7 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+
+
 buildscript {
-    ext.kotlin_version = '1.1.51'
+    ext.kotlin_version = '1.1.60'
     repositories {
         jcenter()
         google()
@@ -24,12 +29,17 @@ ext {
     buildToolsVersion = '27.0.0'
     // App dependencies
     supportLibraryVersion = '27.0.0'
+    resposiryReleaseUrl = properties.getProperty('resposiryReleaseUrl')
+    resposirySnapshotUrl = properties.getProperty('resposirySnapshotUrl')
+    usernameValue = properties.getProperty('username')
+    passwordValue = properties.getProperty('password')
+    groupIdValue = properties.getProperty('groupId')
 }
 
 allprojects {
     repositories {
         jcenter()
-        maven { url "http://101.231.83.139:8081/nexus/content/repositories/releases/"}
+        maven { url "$resposiryReleaseUrl"}
     }
 }
 

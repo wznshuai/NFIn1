@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         ToastHelper.getInstance().showToast(md5)
         val file = File(Environment.getExternalStorageDirectory(), "test.apk")
         DownloadUtil.Builder()
-                .fileUrl("https://awakensit2-app.jujinpan.cn/app/file?id=3973a6a019a14eebbeb909d5dc4db396&version=2.0.0&size=11029692")
+                .fileUrl("")
                 .file(File("/sdcard/test.apk"))
                 .build()
                 .downLoadFile()
