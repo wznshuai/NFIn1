@@ -39,7 +39,7 @@ ext {
 allprojects {
     repositories {
         jcenter()
-        maven { url "$resposiryReleaseUrl"}
+        maven { url resposiryReleaseUrl}
     }
 }
 
