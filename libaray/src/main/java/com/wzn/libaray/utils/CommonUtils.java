@@ -154,6 +154,12 @@ public class CommonUtils {
         return decimalFormat.format(d);
     }
 
+    public static String formatInteger(int d) {
+        DecimalFormat decimalFormat = new DecimalFormat(patternNumberInt);
+        decimalFormat.setRoundingMode(RoundingMode.HALF_EVEN);
+        return decimalFormat.format(d);
+    }
+
     public static String formatNum(long l) {
         DecimalFormat decimalFormat = new DecimalFormat(pattern);
         decimalFormat.setRoundingMode(RoundingMode.HALF_EVEN);

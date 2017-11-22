@@ -37,6 +37,14 @@ public class SharedPreferencesUtil {
         settings.edit().putString(key, value).apply();
     }
 
+    public long getLong(String key) {
+        return settings.getLong(key, 0L);
+    }
+
+    public void saveLong(String key, long value) {
+        settings.edit().putLong(key, value).commit();
+    }
+
     public String getString(String key) {
         return settings.getString(key, "");
     }
@@ -59,7 +67,6 @@ public class SharedPreferencesUtil {
         settings.edit().putBoolean(key, bool).apply();
     }
 
-
     public boolean getBoolean(String key, boolean is) {
         return settings.getBoolean(key, is);
     }
@@ -77,7 +84,7 @@ public class SharedPreferencesUtil {
         settings.edit().clear().commit();
     }
 
-    public void applyClear(){
+    public void applyClear() {
         settings.edit().clear().apply();
     }
 

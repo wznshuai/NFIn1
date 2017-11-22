@@ -4,7 +4,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '26.0.3'
     defaultConfig {
         applicationId "com.wzn.libaray.sample"
         minSdkVersion 14
@@ -25,14 +25,15 @@ dependencies {
     compile project(':libaray')
     compile project(':network')
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.4.0'
     compile 'com.madai.android:annotation:1.0.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    kapt 'com.madai.android:annotation-processor:1.0.1'
+    kapt 'com.madai.android:annotation-processor:1.0.2'
 }
 
 repositories {
     mavenCentral()
+    google()
 }
 buildscript {
 }
