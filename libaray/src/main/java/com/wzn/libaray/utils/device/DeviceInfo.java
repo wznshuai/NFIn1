@@ -23,6 +23,7 @@ import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.support.annotation.RequiresPermission;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -119,7 +120,7 @@ public class DeviceInfo {
         return new Size(point.x, point.y);
     }
 
-
+    @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE)
     public static String getIMEI(Context context) {
         String imei = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE))
                 .getDeviceId();
@@ -129,6 +130,7 @@ public class DeviceInfo {
         return imei;
     }
 
+    @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE)
     public static String getDeviceId(Context pContext) {
 
         if (pContext == null)
@@ -158,6 +160,7 @@ public class DeviceInfo {
         return deviceToken;
     }
 
+    @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
     public static int getNetworkType(Context context) {
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -168,6 +171,7 @@ public class DeviceInfo {
         }
     }
 
+    @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
     public static String getNetworkName(Context context){
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
