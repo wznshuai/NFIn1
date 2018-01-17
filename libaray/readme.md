@@ -5,3 +5,6 @@
 * TitleBar
 * RxBus
 * ToastHelper
+
+# Release Note
+* 1.6.6 StringUtils合并重复方法

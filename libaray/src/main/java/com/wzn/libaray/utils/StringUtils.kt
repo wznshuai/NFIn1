@@ -16,32 +16,15 @@ import java.util.regex.Pattern
 /**
  * Created by luona on 2017/4/17.
  */
-
-/**
- * check  phone
- *
- * @param str
- * @return
- */
-fun matches(str: String, pattern: String): Boolean {
-    val p = Pattern.compile(pattern)
-    val m = p.matcher(str)
-    return m.matches()
-}
-
 /**
  * @param patternString 判断条件，为正则表达式
  * @param input         需要进行判断的字符串
  * @return true，符合给定条件；false，不符合给定条件
  */
 fun islegal(patternString: String, input: String): Boolean {
-    val pattern = Pattern.compile(patternString)
-    val matcher = pattern.matcher(input)
-    return if (matcher.matches()) {
-        true
-    } else {
-        false
-    }
+    val p = Pattern.compile(patternString)
+    val m = p.matcher(input)
+    return m.matches()
 }
 
 /**
@@ -54,9 +37,7 @@ fun isContain(patternString: String, input: String): Boolean {
     val p = Pattern.compile(patternString)
     // 判断ascii码
     val m = p.matcher(input)
-    return if (m.find()) {
-        true
-    } else false
+    return m.find()
 }
 
 /**
